@@ -8,7 +8,7 @@ const DB_PASSWORD = process.env.DB_PASSWORD || 'admin';
 const gPool = new Pool({
     host: DB_HOST,
     user: DB_USER,
-//    password: DB_PASSWORD,
+    password: DB_PASSWORD,
     database: DB_NAME,
     port: 5432,
 })

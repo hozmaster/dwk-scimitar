@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-cm
+  namespace: postgres
+data:
+  POSTGRES_DB: postgresdb
+  POSTGRES_USER: admin
+  pg_hba.conf: |
+    local   all             all                                    trust
+    host    all             all             all                    scram-sha-256
+    host    replication     all             all                    scram-sha-256
