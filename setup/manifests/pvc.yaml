@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: scimitar-pv-claim
-  namespace: kube-system
+  namespace: postgres
 spec:
   storageClassName: scimitar-pv
   accessModes:

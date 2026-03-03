@@ -38,7 +38,8 @@ spec:
         name: pgdata
       spec:
         accessModes: ["ReadWriteOnce"]
-        storageClassName: "standard-rwo"
+        storageClassName: local-path    # If running in K3s/K3d cluster
+#        storageClassName: ""standard-rwo""  <---- If running in GCKE cluster
         resources:
           requests:
             storage: 1Gi
