@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: exercise-config
+  namespace: exercises
+data:
+  message: hello world
+  information.txt: | 
+    this information from file
+  db_host: postgres-svc.default

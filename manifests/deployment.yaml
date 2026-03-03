@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scimitar-deployment
+  namespace: exercises
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scimitar-app
+  template:
+    metadata:
+      labels:
+        app: scimitar-app
+    spec:
+      containers:
+        - name: scimitar-app
+          image: matsubokkuri/scimitar-app:2.5
+          imagePullPolicy: IfNotPresent
+          env:
+            - name : MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: exercise-config
+                  key: message
+          volumeMounts:
+            - mountPath: /config
+              name: information-volume
+              readOnly: true
+        - name: scimitar-backend
+          image: matsubokkuri/scimitar-backend:2.7
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: exercise-config
+                  key: db_host
+      volumes:
+        - name: information-volume
+          configMap:
+            name: exercise-config
+            items:
+              - key: information.txt
+                path: information.txt
+      restartPolicy: Always

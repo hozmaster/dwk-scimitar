@@ -1,0 +1,7 @@
+node_modules/
+Makefile
+Dockerfile
+.git
+.gitignore
+.editorconfig
+manifests/
