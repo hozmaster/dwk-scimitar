@@ -1,6 +1,6 @@
-USERNAME ?= matsubokkuri
+USERNAME ?= $(REGISTRY_NAME)
 REPOSITORY ?= scimitar-app
-TAG ?= 2.5
+TAG ?= 4.12
 
 help: ## Show this help message
 	@echo "Available commands:"
@@ -10,11 +10,11 @@ help: ## Show this help message
 build-image: ## Build the Docker image
 	@echo "🚀 Building the application ... "
 	# docker rmi ${REGISTRY_URL}/${GIT_NAMESPACE}/${APPLICATION}-frontend:${VERSION}
-	@docker build -f ./Dockerfile --tag matsubokkuri/${REPOSITORY}:${TAG} .
+	@docker build -f ./Dockerfile --tag ${USERNAME}/${REPOSITORY}:${TAG} .
 
 .PHONY: push-image
 push-image: ## Push frontend image to private registry
 	@echo "🚀 Push existing images in to the registry ..."
 	@echo "📦 Rename and push the frontend image..."
 
-	docker push matsubokkuri/${REPOSITORY}:${TAG}
+	docker push ${USERNAME}/${REPOSITORY}:${TAG}
