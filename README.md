@@ -21,21 +21,31 @@
 
    Decrypt secret files : 
  
-   `cd setup && sops -d manifest\secret.enc.yaml > manifest\secret.yaml  `
- 
+   ` $ cd setup && sops -d manifest\secret.enc.yaml > manifest\secret.yaml`
+   
    ` $ kustomize build . | kubectl apply -f - `
 
-   ` Wait, check and verify it's running smoothly ... ` 
+   ` Wait, check and verify it's running smoothly ... `
+
+4. Setup required databases and users for Scimitar
    
-4. Create the service :
+   ` $ cd scimitar `
 
-    ` $ kustomize build . | kubectl apply -f -  `
+   ` $ sops -d db-init-sql-enc.yaml > db-init-sql.yaml`
+   
+   ` $ kubectl apply -f db-init-sql.yaml`
+   ` $ kubectl apply -f db-init-job.yaml`
 
-5. Wait for while so everything downloaded and system is finalized. Verify that everything is ok.
+ 5. Create the service :
+    
+   ` $ cd ..\..\k8s && sops -d manifest\secret.enc.yaml > manifest\secret.yaml`
+   ` $ kustomize build . | kubectl apply -f -  `
+
+6. Wait for while so everything downloaded and system is finalized. Verify that everything is ok.
 
     ` $ kubectl get all -n exercises `
 
-Verify :
+   Verify :
  
     - Open the browser url 'http://localhost:8081/'.
     - Increase the ping/pong counter using url address 'http://localhost:8081/pingpong'
