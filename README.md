@@ -19,6 +19,10 @@
 
 3. Create a postgresql stateful set:
 
+   Decrypt secret files : 
+ 
+   `cd setup && sops -d manifest\secret.enc.yaml > manifest\secret.yaml  `
+ 
    ` $ kustomize build . | kubectl apply -f - `
 
    ` Wait, check and verify it's running smoothly ... ` 
