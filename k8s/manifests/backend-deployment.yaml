@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-depl
+  name: scimitar-backend
   namespace: exercises
 spec:
   replicas: 1
@@ -14,35 +14,38 @@ spec:
         app: scimitar-app
     spec:
       initContainers:
-      - name: wait-for-db
-        image: docker.io/postgres:14
-        env:
-          - name: PGHOST
-            value: postgres
-          - name: PGUSER
-            valueFrom:
-              secretKeyRef:
-                key: POSTGRES_USER
-                name: postgres-credentials-b8mfmtc4g6
-          - name: PGPASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: POSTGRES_PASSWORD
-                name: postgres-credentials-b8mfmtc4g6
-          - name: PGDATABASE
-            valueFrom:
-              secretKeyRef:
-                key: POSTGRES_DB
-                name: postgres-credentials-b8mfmtc4g6
-        command:
-          - /bin/sh
-          - -c
-          - |
-            while ! psql -c 'select 1' > /dev/null 2>&1; do
-              echo "waiting for database"
-              sleep 1
-            done
-            echo "database is ready!"
+        - name: wait-for-db
+          image: docker.io/postgres:14
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: exercise-config
+                  key: db_host
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: db_username
+                  name: scimitar-secret
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: scimitar-secret
+                  key: db_password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: db_name
+                  name: exercise-config
+          command:
+            - /bin/sh
+            - -c
+            - |
+              while ! psql -c 'select 1' > /dev/null 2>&1; do
+                echo "waiting for database"
+                sleep 1
+              done
+              echo "database is ready!"
       containers:
         - name: scimitar-backend
           image: matsubokkuri/scimitar-backend:2.7
@@ -53,4 +56,11 @@ spec:
                 configMapKeyRef:
                   name: exercise-config
                   key: db_host
+      volumes:
+        - name: information-volume
+          configMap:
+            name: exercise-config
+            items:
+              - key: information.txt
+                path: information.txt
       restartPolicy: Always

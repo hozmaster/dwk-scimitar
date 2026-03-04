@@ -3,6 +3,8 @@ kind: Kustomization
 resources:
   - manifests/ns.yaml
   - manifests/cm.yaml
+  - manifests/secret.yaml
+  - manifests/backend-deployment.yaml
   - manifests/deployment.yaml
   - manifests/service.yaml
   - manifests/ingress.yaml

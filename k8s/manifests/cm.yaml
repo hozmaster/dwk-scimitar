@@ -8,3 +8,4 @@ data:
   information.txt: | 
     this information from file
   db_host: postgres-svc.postgres
+  db_name: scimitar
