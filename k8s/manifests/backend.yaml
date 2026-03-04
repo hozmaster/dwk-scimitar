@@ -13,9 +13,10 @@ spec:
       labels:
         app: backend
     spec:
-      initContainers:
-        - name: wait-for-db
-          image: docker.io/postgres:18.1
+      containers:
+        - name: scimitar-backend
+          image: matsubokkuri/scimitar-backend:2.7
+          imagePullPolicy: IfNotPresent
           env:
             - name: DB_HOST
               valueFrom:
@@ -37,24 +38,9 @@ spec:
                 configMapKeyRef:
                   key: db_name
                   name: exercise-config
-          command:
-            - /bin/sh
-            - -c
-            - |
-              until psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c 'SELECT 1 FROM pingpong' >/dev/null 2>&1; do
-                echo "Waiting for database..."
-                sleep 2
-              done
-              echo "Database is ready!"
-      containers:
-        - name: scimitar-backend
-          image: matsubokkuri/scimitar-backend:2.7
-          imagePullPolicy: IfNotPresent
-          env:
-            - name: DB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: exercise-config
-                  key: db_host
-      restartPolicy: Always
-  # psql -h postgres-svc.postgres -U scimntair -d scimitar -c "SELECT 1 from pingpong;"
+          readinessProbe:
+            exec:
+              command: [ "psql", -h, "$DB_HOST", "-U", "$DB_USER", "-d", "$DB_NAME", "-c", "SELECT 1 FROM pingpong" ]
+            initialDelaySeconds: 30
+            timeoutSeconds: 2
+          restartPolicy: Always
