@@ -7,4 +7,4 @@ data:
   message: hello world
   information.txt: | 
     this information from file
-  db_host: postgres-svc.default
+  db_host: postgres-svc.postgres
