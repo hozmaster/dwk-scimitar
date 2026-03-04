@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scimitar-backend
+  name: backend
   namespace: exercises
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: scimitar-app
+      app: backend
   template:
     metadata:
       labels:
-        app: scimitar-app
+        app: backend
     spec:
       initContainers:
         - name: wait-for-db
@@ -27,7 +27,7 @@ spec:
                 secretKeyRef:
                   name: scimitar-secret
                   key: db_username
-            - name: DB_PASSWORD
+            - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   name: scimitar-secret
@@ -57,3 +57,4 @@ spec:
                   name: exercise-config
                   key: db_host
       restartPolicy: Always
+  # psql -h postgres-svc.postgres -U scimntair -d scimitar -c "SELECT 1 from pingpong;"

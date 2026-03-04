@@ -27,20 +27,24 @@
 
    ` Wait, check and verify it's running smoothly ... `
 
-4. Setup required databases and users for Scimitar (in project root : 
+4. Setup required databases and users for Scimitar (in project root) : 
    
-   ` $ cd scimitar `
+   ` $ cd postgres\database`
 
-   ` $ sops -d db-init-sql-enc.yaml > db-init-sql.yaml`
+   ` $ sops -d db-setup-sql.enc.yaml > db-setup-sql.yaml`
    
-   ` $ kubectl apply -f db-init-sql.yaml`
-   ` $ kubectl apply -f db-init-job.yaml`
+   ` $ kubectl apply -f db-setup-sql.yaml`
+   ` $ kubectl apply -f db-setup-job.yaml`
 
- 5. Create the service :
+ 5. Create the service (From the project root) :
     
-   ` $ cd ..\..\k8s && sops -d manifest\secret.enc.yaml > manifest\secret.yaml`
-   ` $ kustomize build . | kubectl apply -f -  `
+   ` $ cd k8s `
+   ` sops -d manifest\secret.enc.yaml > manifest\secret.yaml `
+   ` $ kustomize build . | kubectl apply -f - `
 
+   ` $ kubectl apply -f db-init-sql-cm.yaml `
+   ` $ kubectl apply -f db-init-job-cm.yaml `
+   
 6. Wait for while so everything downloaded and system is finalized. Verify that everything is ok.
 
     ` $ kubectl get all -n exercises `
