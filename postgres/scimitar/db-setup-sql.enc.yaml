@@ -1,0 +1,34 @@
+#ENC[AES256_GCM,data:FUXHHOsMoAD/L36VC9U2+qf9CSeC2AQj,iv:erteBqXhpOxw89kgHHwPAwXEX5pWlYVahbu4z8syzhA=,tag:BjhxdMyhB1mkzeIc9EUvyQ==,type:comment]
+apiVersion: ENC[AES256_GCM,data:zp8=,iv:LT/3lBa0lG2wEnpa3rK0QywAk+JzuwqV8zc9EnimSzQ=,tag:gdFMHaQ9Nz41XUn6Ooyuxg==,type:str]
+kind: ENC[AES256_GCM,data:ciKFiMX5yfuN,iv:GqaXuS+v6g5wDWw6OeXF9fuYAeW70tT2q7MZcJo99dU=,tag:ustcxaPzpyeApnq5c9Qe/g==,type:str]
+metadata:
+    name: ENC[AES256_GCM,data:29J4OaTmAxHGNuQ4ui3hnuw=,iv:2p25aBNYeOuFBP7KlGqfHQ19D+K7WZtdXHF31uFEqgY=,tag:sZNWdtvRXt7rjbh0DtaQOg==,type:str]
+    namespace: ENC[AES256_GCM,data:5GR0Kmtg29g=,iv:9SKBKDAHpgagZ4NTEHAsJ0w3uxik8Iloxqs3L+xa+Yk=,tag:PvGvHHfTmud0G2PaVsr4kQ==,type:str]
+data:
+    01-create-users.sql: ENC[AES256_GCM,data:7acWT3rHUUA5tMFWJkS/xkkFLZgxSxZAxfHTLigDjO/loeMir5VvC+qt3RJMoNMoj8U=,iv:UCrXA2NsO/wujqcK1caG/1zpGUoum8Rqu0I7z1YEibM=,tag:VVykb9oBy3eDdAcaDJqXew==,type:str]
+    02-create-dbs.sql: ENC[AES256_GCM,data:zxUwFdQy2NuACEPFICriXk0JN5klPhgIAiRLKZPZ9zAyDHPhpG1ulWlt,iv:EUMDi1lnV6iDi48mCyic5S0a5i5oNoF+fb7PJ8EZkjA=,tag:TUh/mYB7WfJSFZruwhvlPQ==,type:str]
+    03-grant-access-dbs.sql: ENC[AES256_GCM,data:vaS2UoJ6mVbXFqcULqkKrrCIcRFyaECUI8klq4a4ims4ryksXpYrNwFOxPYnlBx09AWPK4OqgbFCchBbGwblIMMvyiQ1BAG+XrLhw0MQ70p9gmfYZ9lzNcvfc/fmX8ddspDN3zUX,iv:KdeOrs+BTZWJmx235+e+sNkhZiRvWdK+7Tw4W8aD09w=,tag:YQUuEeeEtKHlJM0/YDcQaA==,type:str]
+sops:
+    age:
+        - recipient: age15xkpdtjhalua0x9lg8r5g4kaue2hjphq5r8mpsun7n6445ks84psqhz9ed
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBCMnA3d25SdkExeEpEQm5u
+            bUtzdjRiRHdHeTNtNjRZRkVMMmQ1ZlR3Z0gwCklhNm9mSm9XVjRqdXYramd5MWhZ
+            N01tUWNvVnQxcS85LzFsakdnTHY4cXcKLS0tIGtGS1gvNnJtRVJJNGZ3b2JvS3Ni
+            ZWVNRkhENklpeklOVWc2VUtSOWk2TTAK+ehzrUIUzynC4sH5y7VZsuxomPXe2ki4
+            RP6+ouBCY67PuXZArdF9rQzltUR1LJ2XaVw+UJog3p7pZtlfZCNAUQ==
+            -----END AGE ENCRYPTED FILE-----
+        - recipient: age1jyklxpn59trjjkd5tw3ryv2wwqq4matk7amhtswdfhvces88cprs48v2hw
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBuTytOVTRhSHFDcStaRUpS
+            djhBblZRK1U0V2I0ZDkwbmYwZks4ZjRYV0dNCk1oQU9idjE0VzNCcTFZV2M4SC9n
+            clBnSjJMdkNFZkttL0dPeVh0TTNjMzAKLS0tIDNabWRZY3ZoOWZLazNiVUp2UkxC
+            VXE0TmR3TkozNFhWOElRNytDMFIxN0kK1EDwfLL9Za6T318P9Kp3WBIb1gBU7bvL
+            DGGEL74wgZkd3n7tRZjye6hnuimPW4/CrBee8hIPLGVxKgSw06VEAg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-03-04T18:45:31Z"
+    mac: ENC[AES256_GCM,data:zUzN12wuUtMCF+lAXciD9ofg9e30ZpswKBZc87+Wf6frAgMUMPXEnAHArqX03ZtjeFQOiOBdUPFp103U2ekANA9iseWu63n9+RE+DFeDznLWN0zLEui0eTDN+W5TSvMjpYHBX2WzSgbmutNO0MNQq+bAPU3c/KCivsqE3SbJawc=,iv:71NXv58h+pzma53KKMelcX+HtxbE5CgGxI/c0NePdHs=,tag:EbOmCzcC1ZM5xBFAjp0Bng==,type:str]
+    unencrypted_suffix: _unencrypted
+    version: 3.11.0

@@ -4,7 +4,7 @@ metadata:
   name: scimitar-backend
   namespace: exercises
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: scimitar-app
@@ -15,7 +15,7 @@ spec:
     spec:
       initContainers:
         - name: wait-for-db
-          image: docker.io/postgres:14
+          image: docker.io/postgres:18.1
           env:
             - name: DB_HOST
               valueFrom:
@@ -25,8 +25,8 @@ spec:
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  key: db_username
                   name: scimitar-secret
+                  key: db_username
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -34,18 +34,18 @@ spec:
                   key: db_password
             - name: DB_NAME
               valueFrom:
-                secretKeyRef:
+                configMapKeyRef:
                   key: db_name
                   name: exercise-config
           command:
             - /bin/sh
             - -c
             - |
-              while ! psql -c 'select 1' > /dev/null 2>&1; do
-                echo "waiting for database"
-                sleep 1
+              until psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c 'SELECT 1 FROM pingpong' >/dev/null 2>&1; do
+                echo "Waiting for database..."
+                sleep 2
               done
-              echo "database is ready!"
+              echo "Database is ready!"
       containers:
         - name: scimitar-backend
           image: matsubokkuri/scimitar-backend:2.7
@@ -56,11 +56,4 @@ spec:
                 configMapKeyRef:
                   name: exercise-config
                   key: db_host
-      volumes:
-        - name: information-volume
-          configMap:
-            name: exercise-config
-            items:
-              - key: information.txt
-                path: information.txt
       restartPolicy: Always

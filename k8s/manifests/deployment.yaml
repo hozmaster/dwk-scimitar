@@ -18,7 +18,7 @@ spec:
           image: matsubokkuri/scimitar-app:2.5
           imagePullPolicy: IfNotPresent
           env:
-            - name : MESSAGE
+            - name: MESSAGE
               valueFrom:
                 configMapKeyRef:
                   name: exercise-config
@@ -36,4 +36,12 @@ spec:
                 configMapKeyRef:
                   name: exercise-config
                   key: db_host
+      volumes:
+        - name: information-volume
+          configMap:
+            name: exercise-config
+            items:
+              - key: information.txt
+                path: information.txt
+
       restartPolicy: Always

@@ -19,7 +19,7 @@
 
 3. Create a postgresql stateful set:
 
-   Decrypt secret files : 
+   Decrypt secret files (In project root) : 
  
    ` $ cd setup && sops -d manifest\secret.enc.yaml > manifest\secret.yaml`
    
@@ -27,7 +27,7 @@
 
    ` Wait, check and verify it's running smoothly ... `
 
-4. Setup required databases and users for Scimitar
+4. Setup required databases and users for Scimitar (in project root : 
    
    ` $ cd scimitar `
 

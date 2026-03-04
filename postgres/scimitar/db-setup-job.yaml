@@ -15,9 +15,9 @@ spec:
             - "sh"
             - "-c"
             - |
-              until pg_isready -h postgres-svc.postgres -U $PG_USERNAME -d $PG_DATABASE; do sleep 2; done
+              until pg_isready -h postgres-svc.postgres -U admin -d postgres; do sleep 2; done
               for f in /sql/*.sql; do
-                psql -v ON_ERROR_STOP=1 -h postgres-svc.postgres -U $PG_USERNAME -d $PG_DATABASE -f "$f"
+                psql -v ON_ERROR_STOP=1 -h postgres-svc.postgres -U admin -d postgres -f "$f"
               done
           env:
             - name: PGPASSWORD
@@ -25,16 +25,6 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: admin-password
-            - name: PG_DATABASE
-              valueFrom:
-                configMapKeyRef:
-                  name: postgres-cm
-                  key: POSTGRES_DB
-            - name: PG_USERNAME
-              valueFrom:
-                configMapKeyRef:
-                  name: postgres-cm
-                  key: POSTGRES_USER
           volumeMounts:
             - name: sql
               mountPath: /sql

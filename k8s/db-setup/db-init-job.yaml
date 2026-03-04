@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-init-job
+  namespace: exercises
+spec:
+  ttlSecondsAfterFinished: 86400
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: init
+          image: postgres:18.1
+          command:
+            - "sh"
+            - "-c"
+            - |
+              until pg_isready -h postgres-svc.postgres -U $PG_USERNAME -d $PG_DATABASE; do sleep 2; done
+              for f in /sql/*.sql; do
+                psql -v ON_ERROR_STOP=1 -h postgres-svc.postgres -U $PG_USERNAME -d $PG_DATABASE -f "$f"
+              done
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: scimitar-secret
+                  key: db_password
+            - name: PG_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: exercise-config
+                  key: db_name
+            - name: PG_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: scimitar-secret
+                  key: db_username
+          volumeMounts:
+            - name: sql
+              mountPath: /sql
+      volumes:
+        - name: sql
+          configMap:
+            name: db-init-sql-cm

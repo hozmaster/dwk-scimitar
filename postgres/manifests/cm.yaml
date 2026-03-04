@@ -6,6 +6,7 @@ metadata:
 data:
   POSTGRES_DB: postgresdb
   POSTGRES_USER: admin
+  sc_database: scimitar
   pg_hba.conf: |
     local   all             all                                    trust
     host    all             all             all                    scram-sha-256
