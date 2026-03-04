@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-depl
+  namespace: exercises
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scimitar-app
+  template:
+    metadata:
+      labels:
+        app: scimitar-app
+    spec:
+      initContainers:
+      - name: wait-for-db
+        image: docker.io/postgres:14
+        env:
+          - name: PGHOST
+            value: postgres
+          - name: PGUSER
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_USER
+                name: postgres-credentials-b8mfmtc4g6
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_PASSWORD
+                name: postgres-credentials-b8mfmtc4g6
+          - name: PGDATABASE
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_DB
+                name: postgres-credentials-b8mfmtc4g6
+        command:
+          - /bin/sh
+          - -c
+          - |
+            while ! psql -c 'select 1' > /dev/null 2>&1; do
+              echo "waiting for database"
+              sleep 1
+            done
+            echo "database is ready!"
+      containers:
+        - name: scimitar-backend
+          image: matsubokkuri/scimitar-backend:2.7
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: exercise-config
+                  key: db_host
+      restartPolicy: Always
