@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: scimitar-backend
-          image: matsubokkuri/scimitar-backend:2.7
+          image: matsubokkuri/scimitar-backend:4.12
           imagePullPolicy: IfNotPresent
           env:
             - name: DB_HOST
@@ -28,6 +28,11 @@ spec:
                 secretKeyRef:
                   name: scimitar-secret
                   key: db_username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: scimitar-secret
+                  key: db_password
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
@@ -40,7 +45,23 @@ spec:
                   name: exercise-config
           readinessProbe:
             exec:
-              command: [ "psql", -h, "$DB_HOST", "-U", "$DB_USER", "-d", "$DB_NAME", "-c", "SELECT 1 FROM pingpong" ]
-            initialDelaySeconds: 30
+              command:
+                - sh
+                - -c
+                - |
+                  psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c 'SELECT 1 FROM pingpong' >/dev/null 2>&1
+            initialDelaySeconds: 15
             timeoutSeconds: 2
-          restartPolicy: Always
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c 'SELECT 1 FROM pingpong' >/dev/null 2>&1
+            initialDelaySeconds: 60
+            timeoutSeconds: 2
+
+# https://askubuntu.com/questions/1040765/how-to-install-psql-without-postgres:
+# https://www.apptio.com/blog/kubernetes-liveness-probe/
+# https://nieldw.medium.com/kubernetes-probes-for-postgresql-pods-a66d707df6b4

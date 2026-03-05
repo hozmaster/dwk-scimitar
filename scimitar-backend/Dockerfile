@@ -1,5 +1,8 @@
 FROM node:alpine
-LABEL authors="Olli-Pekka Wallin"
+
+RUN apk update && \
+    apk add --no-cache postgresql-client && \
+    rm -rf /var/cache/apk/*
 
 WORKDIR /usr/src/app
 

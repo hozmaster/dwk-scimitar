@@ -2,7 +2,6 @@ const {gPool, getPingCounter} = require("../db/database");
 const router = require('express').Router();
 
 router.get('/pingpong', async (req, res) => {
-
     let pongCounter = await getPingCounter();
     pongCounter++;
     const client = await gPool.connect();
@@ -12,10 +11,13 @@ router.get('/pingpong', async (req, res) => {
 });
 
 router.get('/pings', async (req, res) => {
-    const counter = await getPingCounter();
+    const client = await gPool.connect();
+    const counter = await client.query('SELECT count FROM pingpong');
+    await client.release(true);
     res.json(JSON.stringify({
         'pings': counter
     }));
 });
+
 
 module.exports = router;

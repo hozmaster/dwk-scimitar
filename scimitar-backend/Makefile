@@ -1,6 +1,6 @@
 USERNAME ?= matsubokkuri
 REPOSITORY ?= scimitar-backend
-TAG ?= 2.7
+TAG ?= 4.12
 
 help: ## Show this help message
 	@echo "Available commands:"
