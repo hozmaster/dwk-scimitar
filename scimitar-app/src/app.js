@@ -37,5 +37,4 @@ app.get('/healthZ', async (req, res) => {
     res.send(statusCode);
 })
 
-
 module.exports = app;

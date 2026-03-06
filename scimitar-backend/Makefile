@@ -1,5 +1,6 @@
 USERNAME ?= matsubokkuri
 REPOSITORY ?= scimitar-backend
+GIT_HASH ?= $(shell git log --format="%h" -n 1)
 TAG ?= 4.12
 
 help: ## Show this help message
@@ -10,11 +11,11 @@ help: ## Show this help message
 build-image: ## Build the Docker image
 	@echo "🚀 Building the docker image ... "
 	# docker rmi ${REGISTRY_URL}/${GIT_NAMESPACE}/${APPLICATION}-frontend:${VERSION}
-	@docker build -f ./Dockerfile --tag matsubokkuri/${REPOSITORY}:${TAG} .
+	@docker build -f ./Dockerfile --tag matsubokkuri/${REPOSITORY}:${GIT_HASH} .
 
 .PHONY: push-image
 push-image: ## Push the image to the registry
 	@echo "🚀 Push the docker image to the registry ..."
 	@echo "📦 Rename and push the frontend image..."
 
-	docker push matsubokkuri/${REPOSITORY}:${TAG}
+	docker push matsubokkuri/${REPOSITORY}:${GIT_HASH}
