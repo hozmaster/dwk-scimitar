@@ -23,4 +23,19 @@ app.get('/', async (req, res) => {
     res.send(reply);
 })
 
+app.get('/healthZ', async (req, res) => {
+    // Rude, but should enough to work for health check
+    let statusCode = 200;
+    try {
+        const pings = await getPingCounter();
+        if (pings === -1) {
+            statusCode = 500;
+        }
+    } catch (error)  {
+        res.status(500).send({"healthZ": "failed"})
+    }
+    res.send(statusCode);
+})
+
+
 module.exports = app;

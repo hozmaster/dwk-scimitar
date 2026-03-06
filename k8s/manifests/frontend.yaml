@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scimitar-deployment
+  name: frontend
   namespace: exercises
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scimitar-app
+      app: frontend
   template:
     metadata:
       labels:
-        app: scimitar-app
+        app: frontend
     spec:
       containers:
-        - name: scimitar-app
+        - name: frontend
           image: matsubokkuri/scimitar-app:2.5
           imagePullPolicy: IfNotPresent
           env:
@@ -27,15 +27,12 @@ spec:
             - mountPath: /config
               name: information-volume
               readOnly: true
-        - name: scimitar-backend
-          image: matsubokkuri/scimitar-backend:2.7
-          imagePullPolicy: IfNotPresent
-          env:
-            - name: DB_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: exercise-config
-                  key: db_host
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            httpGet:
+              port: 2346
+              path: /pings
       volumes:
         - name: information-volume
           configMap:
