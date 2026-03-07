@@ -1,6 +1,5 @@
-USERNAME ?= $(REGISTRY_NAME)
 REPOSITORY ?= scimitar-app
-GIT_HASH ?= $(shell git log --format="%h" -n 1)
+GIT_HASH ?= $(shell git log --format="%H" -n 1)
 TAG ?= $(shell cat ./package.json | jq -r ".version")
 
 help: ## Show this help message
@@ -11,11 +10,11 @@ help: ## Show this help message
 build-image: ## Build the Docker image
 	@echo "🚀 Building the application ... "
 	# docker rmi ${REGISTRY_URL}/${GIT_NAMESPACE}/${APPLICATION}-frontend:${VERSION}
-	@docker build -f ./Dockerfile --tag ${USERNAME}/${REPOSITORY}:${GIT_HASH} .
+	@docker build -f ./Dockerfile --tag ${REGISTRY_NAME}/${REPOSITORY}:${TAG} .
 
 .PHONY: push-image
 push-image: ## Push frontend image to private registry
 	@echo "🚀 Push existing images in to the registry ..."
 	@echo "📦 Rename and push the frontend image..."
 
-	docker push ${USERNAME}/${REPOSITORY}:${GIT_HASH}
+	docker --debug push matsubokkeri/scimitar-app:4.1.12

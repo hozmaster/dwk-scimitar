@@ -1,4 +1,5 @@
 FROM node:alpine
+LABEL
 
 RUN apk update && \
     apk add --no-cache postgresql-client && \
