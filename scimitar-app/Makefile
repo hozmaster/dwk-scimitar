@@ -17,4 +17,4 @@ push-image: ## Push frontend image to private registry
 	@echo "🚀 Push existing images in to the registry ..."
 	@echo "📦 Rename and push the frontend image..."
 
-	docker --debug push matsubokkeri/scimitar-app:4.1.12
+	docker --debug push ${REGISTRY_NAME}/scimitar-app:${TAG}
