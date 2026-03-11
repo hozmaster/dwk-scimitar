@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: matsubokkuri/scimitar-app:2.5
+          image: matsubokkuri/scimitar-app:4.1.12
           imagePullPolicy: IfNotPresent
           env:
             - name: MESSAGE
@@ -31,8 +31,9 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 30
             httpGet:
-              port: 2346
-              path: /pings
+              port: 3000
+              path: /healthZ
+              scheme: HTTP
       volumes:
         - name: information-volume
           configMap:
