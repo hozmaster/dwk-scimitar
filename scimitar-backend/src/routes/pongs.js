@@ -13,15 +13,15 @@ router.get('/pingpong', async (req, res) => {
 router.get('/pings', async (req, res) => {
     try {
         const client = await gPool.connect();
-        const counter = await client.query('SELECT count FROM pingpong');
+        const counter = await client.query('SELECT count FROM pingpong where id = 1;', []);
+        const theCount = counter.rows[0].count;
         await client.release(true);
-        res.json(JSON.stringify({
-            'pings': counter
-        }));
+        res.setHeader('Content-Type', 'application/json');
+        res.json({ pings: theCount });
     } catch (error) {
-        res.send(500);
+        console.log(error);
+        res.sendStatus(503);
     }
-
 });
 
 
