@@ -10,7 +10,8 @@ const getPingCounter = async () => {
             url: BACKEND_URL + '/pings',
             timeout: 1000,
         });
-        pings = JSON.parse(res.data).pings;
+        const response = res.data;
+        pings = response.pings;
     } catch (error) {
         console.error(error);
     }

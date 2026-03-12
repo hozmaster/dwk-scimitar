@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: matsubokkuri/scimitar-app:4.1.18
+          image: matsubokkuri/scimitar-app:4.1.19
           imagePullPolicy: IfNotPresent
           env:
             - name: MESSAGE
