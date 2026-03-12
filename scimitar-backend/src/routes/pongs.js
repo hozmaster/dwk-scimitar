@@ -17,7 +17,7 @@ router.get('/pings', async (req, res) => {
         const theCount = counter.rows[0].count;
         await client.release(true);
         res.setHeader('Content-Type', 'application/json');
-        res.json({ pings: theCount });
+        res.json({pings: theCount});
     } catch (error) {
         console.log(error);
         res.sendStatus(503);

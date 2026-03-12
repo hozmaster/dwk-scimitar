@@ -9,4 +9,4 @@ data:
     this information from file
   db_host: postgres-svc.postgres
   db_name: scimitar
-  backend_url: 'http://scimitar-backend-svc.exercises:2346'
+  backend_url: 'http://scimitar-backend-svc:2346'

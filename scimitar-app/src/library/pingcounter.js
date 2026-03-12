@@ -12,6 +12,7 @@ const getPingCounter = async () => {
         });
         pings = JSON.parse(res.data).pings;
     } catch (error) {
+        console.error(error);
     }
     return pings;
 }

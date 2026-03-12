@@ -14,13 +14,6 @@ spec:
                 name: scimitar-app-svc
                 port:
                   number: 2345
-          - path: /healtZ
-            pathType: Prefix
-            backend:
-              service:
-                name: scimitar-app-svc
-                port:
-                  number: 2345
           - path: /pingpong
             pathType: Prefix
             backend:

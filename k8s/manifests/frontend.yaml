@@ -7,15 +7,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend
+      app: scimitar-app
   template:
     metadata:
       labels:
-        app: frontend
+        app: scimitar-app
     spec:
       containers:
         - name: frontend
-          image: matsubokkuri/scimitar-app:4.1.12
+          image: matsubokkuri/scimitar-app:4.1.18
           imagePullPolicy: IfNotPresent
           env:
             - name: MESSAGE
@@ -23,6 +23,11 @@ spec:
                 configMapKeyRef:
                   name: exercise-config
                   key: message
+            - name: BACKEND_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: exercise-config
+                  key: backend_url
           volumeMounts:
             - mountPath: /config
               name: information-volume
@@ -34,6 +39,9 @@ spec:
               port: 3000
               path: /healthZ
               scheme: HTTP
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 5
       volumes:
         - name: information-volume
           configMap:

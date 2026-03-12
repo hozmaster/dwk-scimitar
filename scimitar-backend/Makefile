@@ -1,6 +1,6 @@
 REPOSITORY ?= scimitar-backend
 GIT_HASH ?= $(shell git log --format="%H" -n 1)
-TAG ?= 4.12
+TAG ?= $(shell cat ./package.json | jq -r ".version")
 
 help: ## Show this help message
 	@echo "Available commands:"

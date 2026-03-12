@@ -7,15 +7,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend
+      app: scimitar-app
   template:
     metadata:
       labels:
-        app: backend
+        app: scimitar-app
     spec:
       containers:
         - name: scimitar-backend
-          image: matsubokkuri/scimitar-backend:4.12
+          image: matsubokkuri/scimitar-backend:1.14.6
           imagePullPolicy: IfNotPresent
           env:
             - name: DB_HOST

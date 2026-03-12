@@ -1,5 +1,5 @@
 FROM node:alpine
-LABEL authors="Olli-Pekka Wallin"
+RUN apk add --no-cache curl
 
 WORKDIR /usr/src/app
 RUN mkdir -p /usr/src/app/files
