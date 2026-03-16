@@ -1,9 +1,20 @@
-# Exercise 2.1 Connection pods - Exercise 2.7
+# Exercise 4.1 4.1. Readines probe
+
+Create a ReadinessProbe for the Ping-pong application. It should be
+ready when it has a connection to the database.
+And another ReadinessProbe for Log output application. It should be
+ready when it can receive data from the Ping-pong application.
 
 ## Folders 
 
 - scimitar-app The log-output app.
-- scimitar-backend The ping-pong backend.
+- scimitar-back1end The ping-pong backend.
+- k8s 
+  - db-setup yaml definitions to setup tables and default values
+  - manifests Declarations to manifests
+- postgres 
+  - Postgres setup and 
+  - scimitar setup and 
 
 ## Setup
 
@@ -45,7 +56,7 @@
    ` $ kustomize build . | kubectl apply -f - `
 
    ` $ kubectl apply -f db-init-sql-cm.yaml `
-   ` $ kubectl apply -f db-init-job-cm.yaml `
+   ` $ kubectl apply -f db-init-job.yaml `
    
 6. Wait for while so everything downloaded and system is finalized. Verify that everything is ok.
 

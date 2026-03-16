@@ -1,23 +1,23 @@
-const {gPool, getPingCounter} = require("../db/database");
+const app = require("../app");
+const {getPingCounter, increasePongByOne} = require("./support");
+const {gPool} = require("../db/database");
 const router = require('express').Router();
 
 router.get('/pingpong', async (req, res) => {
-    let pongCounter = await getPingCounter();
-    pongCounter++;
-    const client = await gPool.connect();
-    const result = await client.query('UPDATE pingpong SET count = $1 where id = 1;', [pongCounter]);
-    await client.release(true);
-    res.send(`Pong: ${pongCounter}\n`);
+    try {
+        let pongs = await increasePongByOne();
+        res.send(`Pong: ${pongs}\n`);
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(500);
+    }
 });
 
 router.get('/pings', async (req, res) => {
     try {
-        const client = await gPool.connect();
-        const counter = await client.query('SELECT count FROM pingpong where id = 1;', []);
-        const theCount = counter.rows[0].count;
-        await client.release(true);
+        let pongs = await getPingCounter();
         res.setHeader('Content-Type', 'application/json');
-        res.json({pings: theCount});
+        res.json({pings: pongs});
     } catch (error) {
         console.log(error);
         res.sendStatus(503);
