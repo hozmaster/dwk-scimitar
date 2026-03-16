@@ -8,10 +8,12 @@ spec:
   selector:
     matchLabels:
       app: scimitar-app
+      tier: frontend
   template:
     metadata:
       labels:
         app: scimitar-app
+        tier: frontend
     spec:
       containers:
         - name: frontend

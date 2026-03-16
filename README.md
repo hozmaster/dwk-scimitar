@@ -22,13 +22,16 @@ ready when it can receive data from the Ping-pong application.
 
     ` $ k3d cluster delete `
 
-2. Create cluster with :
+
+2. Create cluster with (k3d) :
    
    ` $ k3d cluster create --port 8082:30080@agent:0 -p 8081:80@loadbalancer --agents 2 `
  
    ` $ docker exec k3d-k3s-default-agent-0 mkdir -p ~/kube_temp `
 
-3. Create a postgresql stateful set:
+3. Create cluster with (GCKE)
+
+4. Create a postgresql stateful set:
 
    Decrypt secret files (From project root) : 
  
@@ -40,7 +43,7 @@ ready when it can receive data from the Ping-pong application.
    
     Wait, check and verify it's running smoothly ...
 
-4. Setup required databases and users for Scimitar (in project root) : 
+5. Setup required databases and users for Scimitar (in project root) : 
    
    ` $ cd postgres\database`
 
@@ -49,7 +52,7 @@ ready when it can receive data from the Ping-pong application.
    ` $ kubectl apply -f db-setup-sql.yaml`
    ` $ kubectl apply -f db-setup-job.yaml`
 
- 5. Create the service (From the project root) :
+ 6. Create the service (From the project root) :
     
    ` $ cd k8s `
    ` sops -d manifest\secret.enc.yaml > manifest\secret.yaml `
@@ -58,7 +61,7 @@ ready when it can receive data from the Ping-pong application.
    ` $ kubectl apply -f db-init-sql-cm.yaml `
    ` $ kubectl apply -f db-init-job.yaml `
    
-6. Wait for while so everything downloaded and system is finalized. Verify that everything is ok.
+7. Wait for while so everything downloaded and system is finalized. Verify that everything is ok.
 
     ` $ kubectl get all -n exercises `
 

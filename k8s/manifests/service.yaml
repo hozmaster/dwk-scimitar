@@ -7,9 +7,10 @@ spec:
   type: ClusterIP
   selector:
     app: scimitar-app
+    tier: frontend
   ports:
     - name: scimitar-app
-      port: 2345
+      port: 80
       protocol: TCP
       targetPort: 3000
 ---
@@ -22,8 +23,9 @@ spec:
   type: ClusterIP
   selector:
     app: scimitar-app
+    tier: backend
   ports:
-    - name: scimitar-backend
-      port: 2346
+    - name: backend
+      port: 80
       protocol: TCP
       targetPort: 3010

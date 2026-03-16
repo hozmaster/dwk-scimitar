@@ -6,5 +6,6 @@ resources:
   - manifests/secret.yaml
   - manifests/backend.yaml
   - manifests/frontend.yaml
+  - manifests/gateway.yaml
+  - manifests/route.yaml
   - manifests/service.yaml
-  - manifests/ingress.yaml

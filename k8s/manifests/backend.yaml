@@ -8,14 +8,16 @@ spec:
   selector:
     matchLabels:
       app: scimitar-app
+      tier: backend
   template:
     metadata:
       labels:
         app: scimitar-app
+        tier: backend
     spec:
       containers:
         - name: scimitar-backend
-          image: matsubokkuri/scimitar-backend:1.14.6
+          image: matsubokkuri/scimitar-backend:1.14.7
           imagePullPolicy: IfNotPresent
           env:
             - name: DB_HOST
