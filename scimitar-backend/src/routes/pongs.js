@@ -35,6 +35,8 @@ router.get('/healthZ', async (req, res) => {
         let pongs = await getPingCounter();
         if (pongs) {
             res.sendStatus(200);
+        } else {
+            console.log("pongs::", pongs);
         }
     } catch (error) {
         console.log(error);
