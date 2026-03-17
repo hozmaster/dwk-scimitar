@@ -25,7 +25,7 @@ spec:
     app: scimitar-app
     tier: backend
   ports:
-    - name: backend
+    - name: scimitar-backend
       port: 80
       protocol: TCP
       targetPort: 3010
