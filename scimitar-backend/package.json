@@ -1,6 +1,6 @@
 {
   "name": "scimitar-backend",
-  "version": "1.14.7",
+  "version": "1.14.10",
   "description": "",
   "main": "index.js",
   "scripts": {

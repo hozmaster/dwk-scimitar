@@ -1,9 +1,13 @@
-const app = require("../app");
-const {getPingCounter, increasePongByOne} = require("./support");
-const {gPool} = require("../db/database");
 const router = require('express').Router();
+const {getPingCounter, increasePongByOne} = require("./support");
+
+router.get('/', async (req, res) => {
+    console.log ("backend: /");
+    res.sendStatus(200);
+});
 
 router.get('/pingpong', async (req, res) => {
+    console.log ("backend: /pingpong");
     try {
         let pongs = await increasePongByOne();
         res.send(`Pong: ${pongs}\n`);
@@ -14,6 +18,7 @@ router.get('/pingpong', async (req, res) => {
 });
 
 router.get('/pings', async (req, res) => {
+    console.log ("backend: /pings");
     try {
         let pongs = await getPingCounter();
         res.setHeader('Content-Type', 'application/json');
@@ -24,5 +29,17 @@ router.get('/pings', async (req, res) => {
     }
 });
 
+router.get('/healthZ', async (req, res) => {
+    console.log ("backend: /healthZ");
+    try {
+        let pongs = await getPingCounter();
+        if (pongs) {
+            res.sendStatus(200);
+        }
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(503);
+    }
+});
 
 module.exports = router;
