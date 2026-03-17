@@ -1,71 +1,85 @@
-# Exercise 4.1 4.1. Readines probe
+# Exercise 4.1 Readines probe
 
-Create a ReadinessProbe for the Ping-pong application. It should be
-ready when it has a connection to the database.
-And another ReadinessProbe for Log output application. It should be
-ready when it can receive data from the Ping-pong application.
+* Create a ReadinessProbe for the Ping-pong application. It should be  
+  ready when it has a connection to the database.
+* And another ReadinessProbe for Log output application. It should be  
+  ready when it can receive data from the Ping-pong application.
 
-## Folders 
 
-- scimitar-app The log-output app.
-- scimitar-back1end The ping-pong backend.
-- k8s 
-  - db-setup yaml definitions to setup tables and default values
-  - manifests Declarations to manifests
-- postgres 
-  - Postgres setup and 
-  - scimitar setup and 
+## Folders
+
+```
+├── k8s
+│    ├── db-setup       // Setup files for tables and inits
+│    └── manifests      // Manifest application itself 
+├── postgres            //
+│    ├── manifests      // Manifests files to setup postgreql 
+│    └── scimitar       // To create users and databases for application
+├── scimitar-app        // Frotend 
+└── scimitar-backend    // Backend
+```
 
 ## Setup
 
-1. Delete cluster :
+Create cluster to Google Kubernetes service with Gateway support:
 
-    ` $ k3d cluster delete `
+```bash
+gcloud container clusters create dwk-cluster --zone=europe-north1-b --cluster-version=1.33 --disk-size=32 --num-nodes=2 --machine-type=e2-small 
+```
+
+Switch to use Gateway API:
+
+```bash 
+gcloud container clusters update dwk-cluster --location=europe-north1-b --gateway-api=standard
+```
+
+## Installation:
+
+#### Setup database :
+
+Create a PostgreSQL installation:
+
+	Derypt secret files (From project root) :  
+  
+```bash   
+$ cd postgres  
+$ sops -d manifest\secret.enc.yaml > manifest\secret.yaml  
+$ kustomize build . | kubectl apply -f -   
+```  
+	
+Wait, check and verify it's running smoothly ...  
+	 
+#### Setup required databases and users for Scimitar (in project root) :  
+	 
+` $ cd postgres\database`  
+` $ sops -d db-setup-sql.enc.yaml > db-setup-sql.yaml`  
+` $ kubectl apply -f db-setup-sql.yaml`  
+` $ kubectl apply -f db-setup-job.yaml`  
+
+###  Install the service (From the project root) :
+
+``` 
+$ cd k8s 
+$ sops -d manifest\secret.enc.yaml > manifest\secret.yaml 
+$ kustomize build . | kubectl apply -f - 
+```  
+
+Init tables and default values:
+
+``` $ kubectl apply -f db-init-sql-cm.yaml 
+$ kubectl apply -f db-init-job.yaml 
+```  
+
+6. Wait & observe
+
+    ` kubectl get pods,svc,deploy,sts,jobs -n exercises -w `
 
 
-2. Create cluster with (k3d) :
-   
-   ` $ k3d cluster create --port 8082:30080@agent:0 -p 8081:80@loadbalancer --agents 2 `
- 
-   ` $ docker exec k3d-k3s-default-agent-0 mkdir -p ~/kube_temp `
+7. Find the external URL (Gateway API way)
 
-3. Create cluster with (GCKE)
+    ` kubectl get gateway scimitar-gateway -n exercises -o jsonpath='{.status.addresses[0].value} `
 
-4. Create a postgresql stateful set:
-
-   Decrypt secret files (From project root) : 
- 
-   ``` 
-    $ cd postgres 
-    $ sops -d manifest\secret.enc.yaml > manifest\secret.yaml
-    $ kustomize build . | kubectl apply -f - 
-   ```
-   
-    Wait, check and verify it's running smoothly ...
-
-5. Setup required databases and users for Scimitar (in project root) : 
-   
-   ` $ cd postgres\database`
-
-   ` $ sops -d db-setup-sql.enc.yaml > db-setup-sql.yaml`
-   
-   ` $ kubectl apply -f db-setup-sql.yaml`
-   ` $ kubectl apply -f db-setup-job.yaml`
-
- 6. Create the service (From the project root) :
-    
-   ` $ cd k8s `
-   ` sops -d manifest\secret.enc.yaml > manifest\secret.yaml `
-   ` $ kustomize build . | kubectl apply -f - `
-
-   ` $ kubectl apply -f db-init-sql-cm.yaml `
-   ` $ kubectl apply -f db-init-job.yaml `
-   
-7. Wait for while so everything downloaded and system is finalized. Verify that everything is ok.
-
-    ` $ kubectl get all -n exercises `
-
-   Verify :
- 
-    - Open the browser url 'http://localhost:8081/'.
-    - Increase the ping/pong counter using url address 'http://localhost:8081/pingpong'
+Then open:
+- http://34.118.XX.XX/
+- http://34.118.XX.XX/pingpong
+- http://34.118.XX.XX/pings
