@@ -29,8 +29,7 @@ gcloud container clusters update dwk-cluster \
   --location europe-north1-b \
   --gateway-api=standard
 
-# Optional: also enable the GKE Gateway controller if you want Google-managed Gateway
-# (usually preferred in GKE unless you run your own like Envoy/NGINX Istio/etc)
+# Also enable the GKE Gateway controller:
 gcloud container clusters update dwk-cluster \
   --location europe-north1-b \
   --enable-gateway-api
