@@ -19,7 +19,7 @@
 └── scimitar-backend    // Backend
 ```
 
-# Scimitar Deployment – Modern Gateway API Style (2025–2026 edition)
+# Scimitar Deployment 
 
 1. Enable Gateway API on the cluster (if not already done)
 
