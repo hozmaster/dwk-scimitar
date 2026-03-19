@@ -1,4 +1,4 @@
-# Exercise 4.1 Readines probe
+# Exercise 4.1 Readiness probe
 
 * Create a ReadinessProbe for the Ping-pong application. It should be  
   ready when it has a connection to the database.
@@ -19,65 +19,101 @@
 └── scimitar-backend    // Backend
 ```
 
-## Setup
+# Scimitar Deployment – Modern Gateway API Style (2025–2026 edition)
 
-Create cluster to Google Kubernetes service with Gateway support:
+1. Enable Gateway API on the cluster (if not already done)
 
 ```bash
-gcloud container clusters create dwk-cluster --zone=europe-north1-b --cluster-version=1.33 --disk-size=32 --num-nodes=2 --machine-type=e2-small 
-```
+# Standard Gateway API CRDs + GatewayClass + basic controllers
+gcloud container clusters update dwk-cluster \
+  --location europe-north1-b \
+  --gateway-api=standard
 
-Switch to use Gateway API:
-
-```bash 
-gcloud container clusters update dwk-cluster --location=europe-north1-b --gateway-api=standard
-```
-
-## Installation:
-
-#### Setup database :
-
-Create a PostgreSQL installation:
-
-	Derypt secret files (From project root) :  
-  
-```bash   
-$ cd postgres  
-$ sops -d manifest\secret.enc.yaml > manifest\secret.yaml  
-$ kustomize build . | kubectl apply -f -   
-```  
-	
-Wait, check and verify it's running smoothly ...  
-	 
-#### Setup required databases and users for Scimitar (in project root) :  
-	 
-` $ cd postgres\database`  
-` $ sops -d db-setup-sql.enc.yaml > db-setup-sql.yaml`  
-` $ kubectl apply -f db-setup-sql.yaml`  
-` $ kubectl apply -f db-setup-job.yaml`  
-
-###  Install the service (From the project root) :
-
+# Optional: also enable the GKE Gateway controller if you want Google-managed Gateway
+# (usually preferred in GKE unless you run your own like Envoy/NGINX Istio/etc)
+gcloud container clusters update dwk-cluster \
+  --location europe-north1-b \
+  --enable-gateway-api
 ``` 
-$ cd k8s 
-$ sops -d manifest\secret.enc.yaml > manifest\secret.yaml 
-$ kustomize build . | kubectl apply -f - 
+
+Verify
+
+```bash
+kubectl get gatewayclass
+
+# Should show at least "gke-l7-global-external-managed" or similar
+````
+
+2. PostgresSQL
+
+```bash
+cd postgres
+
+# Decrypt secrets
+sops -d manifest/secret.enc.yaml > manifest/secret.yaml
+
+# Apply (with kustomize)
+kustomize build . --load-restrictor LoadRestrictionsNone | kubectl apply -f -
+
+# Wait & verify
+kubectl -n exercises wait --for=condition=Ready pod -l app=postgres --timeout=300s
+kubectl -n exercises get pods,svc -l app=postgres
+```
+
+	 
+3. Create Scimitar database + user + permissions (idempotent job)
+
+```bash
+cd ../postgres/database
+
+sops -d db-setup-sql.enc.yaml > db-setup-sql.yaml
+
+# Apply config + job
+kubectl apply -f db-setup-sql.yaml
+kubectl apply -f db-setup-job.yaml
+
+# Wait for completion (you can also use --wait=false and check later)
+kubectl wait --for=condition=Complete job/db-setup -n exercises --timeout=120s
+````
+
+4.  Initialize schema & seed data
+
+```bash
+# Apply configmap with initialization SQL
+kubectl apply -f db-init-sql-cm.yaml
+
+# Run initialization job
+kubectl apply -f db-init-job.yaml
+
+# Wait for it to finish
+kubectl wait --for=condition=Complete job/db-init -n exercises --timeout=180s
 ```  
 
-Init tables and default values:
 
-``` $ kubectl apply -f db-init-sql-cm.yaml 
-$ kubectl apply -f db-init-job.yaml 
-```  
+5. Wait & observe
 
-6. Wait & observe
+```
+# Watch everything coming up
+kubectl get pods,svc,deploy,sts,jobs -n exercises -w
 
-    ` kubectl get pods,svc,deploy,sts,jobs -n exercises -w `
+# Look especially for:
+# • postgres-...    
+# • scimitar-app-... or backend-...
+# • scimitar-gateway (Gateway resource)
+```
 
+6. Find the external URL (Gateway API way)
 
-7. Find the external URL (Gateway API way)
+```bash
+ kubectl get gateway scimitar-gateway -n exercises -o jsonpath='{.status.addresses[0].value} `
+``` 
 
-    ` kubectl get gateway scimitar-gateway -n exercises -o jsonpath='{.status.addresses[0].value} `
+Example output you might see:
+
+```bash
+Addresses:
+  Value:  34.118.XX.XX
+```
 
 Then open:
 - http://34.118.XX.XX/
