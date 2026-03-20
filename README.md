@@ -63,7 +63,7 @@ kubectl -n exercises get pods,svc -l app=postgres
 3. Create Scimitar database + user + permissions (idempotent job)
 
 ```bash
-cd ../postgres/database
+cd ../postgres/scimitar
 
 sops -d db-setup-sql.enc.yaml > db-setup-sql.yaml
 
