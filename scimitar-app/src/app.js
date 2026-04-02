@@ -25,11 +25,10 @@ app.get('/', async (req, res) => {
 
 app.get('/healthZ', async (req, res) => {
     // Rude, but should enough to work for health check
-    console.log("healthZ");
+    console.log("/healthZ");
     let statusCode = 200;
     try {
         const pings = await getPingCounter();
-        console.log(pings);
         if (pings === -1) {
             statusCode = 503;
         }
@@ -37,7 +36,6 @@ app.get('/healthZ', async (req, res) => {
         console.log(error);
         statusCode = 503;
     }
-    console.log("/healthZ code : " + statusCode);
     res.sendStatus(statusCode);
 })
 
